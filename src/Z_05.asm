@@ -4130,7 +4130,8 @@ CheckBossSoundEffectUW:
     BEQ :+                      ; If the boss was defeated, go turn off ambient sound effects.
     LDY RoomId
     LDA LevelBlockAttrsE, Y
-    AND #$60                    ; Sound effect index
+    AND #$40                    ; Sound effect index
+                                ; Checking for only one bit so we can have more items. --Rose
     ASL                         ; Shift the sound effect index to the low end of the byte.
     ROL
     ROL
@@ -7664,19 +7665,7 @@ HasCompass:
 HasMap:
     LDX #$11                    ; Check maps.
 :
-    LDA CurLevel
-    BEQ @Exit                   ; If in OW, then return.
-    SEC
-    SBC #$01                    ; Base the level number on zero.
-    CMP #$08
-    BCC :+                      ; If in level 9,
-    INX                         ; then check the level 9 variables.
-    INX
-:
-    AND #$07                    ; Sanitize the zero-based level number.
-    TAY
-    LDA Items, X
-    AND LevelMasks, Y           ; Return the item value for the current level.
+    LDA CurLevel                ; If we're on overworld, no map/compass. Otherwise, map/compass! --Rose
 
 @Exit:
     RTS
@@ -8211,8 +8200,8 @@ CreateRoomObjects:
     ; stand in for it.
     LDY RoomId
     LDA LevelBlockAttrsE, Y
-    AND #$1F                    ; Room item
-    CMP #$03
+    AND #$3F                    ; Room item
+    CMP #$3F
     BNE :+
     DEC ObjState+19
 :
@@ -8249,7 +8238,7 @@ CreateRoomObjects:
     ; the move it left 8 pixels.
     LDY RoomId
     LDA LevelBlockAttrsE, Y
-    AND #$1F                    ; Room item
+    AND #$3F                    ; Room item
     CMP #$1B                    ; Triforce piece
     BNE :+
     LDA ObjX+19

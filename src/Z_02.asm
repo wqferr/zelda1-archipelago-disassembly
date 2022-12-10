@@ -1694,7 +1694,7 @@ UpdateModeERegister:
     PHA
     TAX
     LDY #$00                    ; Set second quest in file B.
-    LDA #$01
+    LDA #$00                    ; Actually, let's not and say we did --Rose
     STA ($CC), Y
 
 @FlagBReady:

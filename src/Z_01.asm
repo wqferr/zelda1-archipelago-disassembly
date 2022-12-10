@@ -126,9 +126,23 @@ InitCaveContinue:
     PLA
     AND #$C0
     STA $03
+    ; Get the type of shop and store it --Rose
+    TYA
+    CMP #01                     ; Take Any Cave ID. --Rose
+    BEQ @StoreShopType
+    SEC
+    CMP #$10                    ; Highest shop ID is 0x10
+    BCS @GetItemOffsets
+    SEC
+    SBC #$0A                    ; Lowest is 0x0A. Most importantly, we've bounded the shop ID
+    BCC @GetItemOffsets         ; to a value between 0 and 7 so we can set flags --Rose
+
+@StoreShopType:
+    STA ShopType
 
     ; At this point, the Y register still has the cave index.
     ; Multiply it by 3 to get the offset of the first item in a set of 3.
+@GetItemOffsets:
     LDA #$FD
 :
     CLC
@@ -409,11 +423,29 @@ DrawCaveItems:
     ; Look up and set the X coordinate for the current item.
     LDA CaveWareXs, X
     STA ObjX+19
-
+    
+    ; Check if slot has been bought from --Rose
+    LDA ShopType
+    BEQ @ContinueShop
+    STX $062C
+    TAX
+    LDA #$01
+:
+    ASL
+    DEX
+    BNE :-
+    LDX $062C
+    AND ShopSlot1PickedUp, X
+    BEQ @ContinueShop
+    LDA #$A3                    ; If so, we offset the sprite by five pixels --Rose
+    STA ObjY+19
+    BPL :+
+    
     ; Set Y coordinate $98 for the item.
+@ContinueShop:
     LDA #$98
     STA ObjY+19
-
+:
     ; If the item is nothing ($3F), then loop gain.
     LDA CaveItemIds, X
     AND #$3F
@@ -829,6 +861,21 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     ; Flag the item taken by setting its ID to $FF.
     LDA #$FF
     STA CaveItemIds, X
+    ; Mark the shop slot as having been taken from --Rose
+    LDA ShopType
+    BEQ @ContinueTakeItem
+    STX $062C                   ; Stash X so we can use it without stepping on toes --Rose
+    TAX
+    LDA #$01
+:
+    ASL
+    DEX
+    BNE :-
+    LDX $062C
+    ORA ShopSlot1PickedUp, X
+    STA ShopSlot1PickedUp, X
+
+@ContinueTakeItem:
     PLA                         ; Pop the item ID
     JSR TakeItem
     LDA #$1E                    ; Blank textbox lines
@@ -1906,7 +1953,8 @@ SummonWhirlwind:
 
 @LoopTriforcePiece:
     ; If there are no triforce pieces, then return.
-    LDA InvTriforce
+    LDA #$FF
+    NOP
     BEQ L6104_Exit
 
     ; If we have gotten this triforce piece, then go try to make a
@@ -4608,7 +4656,7 @@ TakeClass0Complex:
     ; X: item type
     ; Y: item slot
     LDA CurLevel
-    BEQ @Exit                   ; If in OW, return.
+    ; Removed OW check, --Rose
     CPY #$1B                    ; Triforce of Power item slot
     BEQ L_TakePowerTriforce
     CPY #$11                    ; Map item slot
@@ -4623,6 +4671,11 @@ TakeClass0Complex:
     BCC :+                      ; If the result >= 8, we're in level 9,
     INY                         ; So add 2 to the item slot to use the one for level 9.
     INY
+:
+
+    CPX #$1B                    ; Increment triforce count on picking one up. --Rose
+    BNE :+
+    INC InvTriforceCount
 :
     AND #$07                    ; Make sure the level index is in the range 0 to 8.
     TAX
@@ -6697,7 +6750,7 @@ Filler_7751:
     .BYTE $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
     .BYTE $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
     .BYTE $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-    .BYTE $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .BYTE $FF, $FF
 
 .SEGMENT "BANK_01_ISR"
 
