@@ -7666,7 +7666,7 @@ HasMap:
     LDX #$11                    ; Check maps.
 :
     LDA CurLevel                ; If we're on overworld, no map/compass. Otherwise, map/compass! --Rose
-
+.RES 20, $EA                    ; Don't ruin other offsets we're writing to in AP. --Rose
 @Exit:
     RTS
 

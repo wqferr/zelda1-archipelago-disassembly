@@ -1833,12 +1833,11 @@ UpdateMode5Play:
     LDA ButtonsPressed
     AND #$20
     BEQ @CheckPaused            ; If pressed Select,
-    LDA Paused                  ; then toggle pause.
-    EOR #$01
-    STA Paused
-    BNE @CheckPaused            ; If not paused,
-    LDA #$0F                    ; then enable sound.
-    STA ApuStatus_4015
+    LDA #$05
+    JSR SwitchBank
+    LDA #$01
+    LDY SelectedItemSlot
+    JSR FindAndSelectOccupiedItemSlot
 
 @CheckPaused:
     ; If paused, then make sure to use NT 0,
@@ -2638,6 +2637,8 @@ Walker_Move:
     BEQ @FilterInput
     LDA InvClock
     ORA ObjStunTimer, X
+    BNE L1EFCF_Exit
+    LDA ItemLiftTimer ; Check if Link is lifting an item. If so, don't move. --Rose
     BNE L1EFCF_Exit
 
 @FilterInput:

@@ -127,11 +127,13 @@ InitCaveContinue:
     AND #$C0
     STA $03
     ; Get the type of shop and store it --Rose
+    LDA #$FF
+    STA ShopType
     TYA
     CMP #01                     ; Take Any Cave ID. --Rose
     BEQ @StoreShopType
     SEC
-    CMP #$10                    ; Highest shop ID is 0x10
+    CMP #$11                    ; Highest shop ID is 0x10
     BCS @GetItemOffsets
     SEC
     SBC #$0A                    ; Lowest is 0x0A. Most importantly, we've bounded the shop ID
@@ -426,6 +428,8 @@ DrawCaveItems:
     
     ; Check if slot has been bought from --Rose
     LDA ShopType
+    CLC
+    ADC #$01
     BEQ @ContinueShop
     STX $062C
     TAX
@@ -437,9 +441,9 @@ DrawCaveItems:
     LDX $062C
     AND ShopSlot1PickedUp, X
     BEQ @ContinueShop
-    LDA #$A3                    ; If so, we offset the sprite by five pixels --Rose
+    LDA #$93                    ; If so, we offset the sprite by five pixels --Rose
     STA ObjY+19
-    BPL :+
+    BNE :+
     
     ; Set Y coordinate $98 for the item.
 @ContinueShop:
@@ -863,6 +867,7 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     STA CaveItemIds, X
     ; Mark the shop slot as having been taken from --Rose
     LDA ShopType
+    ADC #$01
     BEQ @ContinueTakeItem
     STX $062C                   ; Stash X so we can use it without stepping on toes --Rose
     TAX
