@@ -867,6 +867,10 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     STA CaveItemIds, X
     ; Mark the shop slot as having been taken from --Rose
     LDA ShopType
+    CMP #01
+    BNE :+
+    INC TakeAnyCavesChecked     ; If it's a take-any cave, add it to the count so AP knows when to backfill --Rose
+:
     ADC #$01
     BEQ @ContinueTakeItem
     STX $062C                   ; Stash X so we can use it without stepping on toes --Rose

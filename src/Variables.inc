@@ -266,6 +266,7 @@ LastBossDefeated := $672
 InvBoomerang := $674
 InvMagicBoomerang := $675
 InvMagicShield := $676
+TakeAnyCavesChecked := $678
 InvTriforceCount := $679
 MaxBombs := $67C
 RupeesToAdd := $67D
