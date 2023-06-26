@@ -2,6 +2,9 @@
 *.bin
 *.nes
 *.o
+*.asm-listing
+mapfile.txt
+
 bak/
 bin/
 ext/

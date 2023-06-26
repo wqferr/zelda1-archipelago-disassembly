@@ -8,7 +8,7 @@ trap { break }
 function Assemble( $srcPath, $objPath )
 {
 	write-host "Assembling $srcPath"
-	.\ext\ca65 $srcPath -o $objPath --bin-include-dir .\bin
+	.\ext\ca65 $srcPath -o $objPath --bin-include-dir .\bin --listing $srcPath-listing
 
 	$passed = $LastExitCode -eq 0
 	$script:assemblyPassed = $script:assemblyPassed -and $passed
@@ -100,7 +100,7 @@ if ( !$assemblyPassed )
 }
 
 echo "Linking"
-.\ext\ld65 -o bin\Z.bin -C src\Z.cfg $objPaths
+.\ext\ld65 -o bin\Z.bin -C src\Z.cfg $objPaths --mapfile mapfile.txt
 if ( $LastExitCode -ne 0 ) { exit }
 
 echo "Combining raw ROM with NES header"
