@@ -1,35 +1,21 @@
 Introduction
 ------------
 
-Years ago, I reverse engineered The Legend of Zelda ad hoc for the purpose of remaking it in
-a high-level language. I remade it as complete as I could. But, I always felt that the
-disassembly was a bit wasted, because - despite being necessary for the remake - was incomplete,
-poorly documented, and generally unfit for sharing.
+This is Archipelago, a multi world randomizer. This means it randomizes multiple games at once, giving
+you items in different games, or from different games. For a complete description of what it can do,
+check the [relevant docs from the main Archipelago repo](https://github.com/Rosalie-A/Archipelago/blob/1f5cd8d7210b850dba5c1946a40eb543c39bf3b5/worlds/tloz/docs/en_The%20Legend%20of%20Zelda.md)
 
-The desire to start this complete disassembly project came after taking inspiration from
-the work of Disch on the Final Fantasy disassembly, and Doppelganger's Super Mario Bros.
-disassembly.
 
+This project is just supporting the main randomizer. We apply small tweaks to the rom, so that Archipelago
+is able to work with the final rom more easily.
 
 Development
 -----------
 
-I started this project in October 2020. Although I used and enjoyed FCEUX for the original
-ad hoc reverse engineering project in 2013; I found the Mesen emulator to be more helpful this
-time around, because of several features, including:
+We have done the following changes to make the ROM work better with Archipelago:
+* Change how empty rooms are encoded, so there is a single way of doing it across cave and dungeon rooms.
 
-- adding and changing labels on the fly
-- adding comments
-- syntax coloring
-- the event viewer (useful in figuring out scrolling)
-
-The disassembly listing in this project was produced by a tool I wrote that processes Mesen's
-.MLB file and the ROM. Among other features, it figures out:
-
-- how to generate ca65 cheap and unnamed labels
-- what procedures are mapped from different banks at each call site
-- replaces memory instruction operands with custom expressions
-- disassembles machine code
+In the future, we want to implement the following features:
 
 
 Building a ROM
@@ -43,10 +29,28 @@ Original.nes must be the "(U) (PRG0) [!]" version of the ROM.
 
 To skip the verification, pass the option --NoVerify to build.ps1.
 
+Historical context
+-------
+
+This project started as a project from Aldo Núñez, who managed to remake The Legend of Zelda in a
+higher level language, and decided to make a more shareable version. Aldo wrote their own tool to
+generate the assembly file with multiple interesting features.
+
+Almost 2 years later, Rosalie-A and t3hf1gm3ngt came around and started to work on making a
+randomizer with the disassembly. Everything we're doing here is built on tops of their work and we'd
+like to thank them for it!
+
 
 Contact
 -------
 
-Aldo Núñez
+@billionai
+@wqferr
+@ToransuShoujo
 
-aldonunez1@gmail.com
+Special thanks to:
+--------
+
+Also Núñez - For the original disassembly of the code!
+Rosalie-A - For the changes and the first edition of the randomizer
+t3hf1gm3ngt - For the work on the application side of the randomizer
