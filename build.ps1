@@ -117,3 +117,5 @@ if ( !$NoVerify )
 		echo "ROM image mismatch"
 	}
 }
+
+python3 patch_emtpy_dungeon_rooms.py bin\Z.nes
