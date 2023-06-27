@@ -8201,7 +8201,7 @@ CreateRoomObjects:
     LDY RoomId
     LDA LevelBlockAttrsE, Y
     AND #$3F                    ; Room item
-    CMP #$3F
+    CMP #$3F                    ; We're changing "nothing" to be the usual 0x3F, and we've made the room for it, so we're masking against six bits, not five. --Rose
     BNE :+
     DEC ObjState+19
 :
