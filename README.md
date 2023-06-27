@@ -13,7 +13,7 @@ Development
 -----------
 
 We have done the following changes to make the ROM work better with Archipelago:
-* Change how empty rooms are encoded, so there is a single way of doing it.
+* Change how empty rooms are encoded, so there is a single way of doing it across cave and dungeon rooms.
 
 In the future, we want to implement the following features:
 
