@@ -26,6 +26,7 @@ def main():
     if len(argv) < 2:
         usage()
 
+    print('Applying patch: update "empty dungeon room" flag')
     with open(argv[1], "rb") as rom_file:
         rom_data = bytearray(rom_file.read())
 

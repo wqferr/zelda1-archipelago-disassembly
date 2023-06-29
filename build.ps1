@@ -118,4 +118,5 @@ if ( !$NoVerify )
 	}
 }
 
-python3 patch_emtpy_dungeon_rooms.py bin\Z.nes
+python3 patches\emtpy_dungeon_rooms.py bin\Z.nes
+python3 patches\better_minimap_grid.py bin\Z.nes
