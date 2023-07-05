@@ -119,5 +119,5 @@ if ( !$NoVerify )
 }
 
 python3 patches\emtpy_dungeon_rooms.py bin\Z.nes
-# python3 patches\better_minimap_grid.py bin\Z.nes # <-- causes visual glitches in dungeon walls
+python3 patches\better_minimap_grid.py bin\Z.nes # <-- causes visual glitches in dungeon walls
 python3 patches\calculate_bsdiff4.py ext\Original.nes bin\Z.nes bin\z1_base_patch.bsdiff4
