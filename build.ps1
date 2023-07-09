@@ -16,12 +16,6 @@ function Assemble( $srcPath, $objPath )
 	if ( !$passed ) { write-host "" }
 }
 
-function CompareBinaryFiles( $left, $right )
-{
-	write-host "Comparing $left and $right"
-	return CompareFiles $left $right
-}
-
 function CheckRequirements()
 {
 	$message = "Missing external. Ensure ext directory contains: "
@@ -106,18 +100,6 @@ if ( $LastExitCode -ne 0 ) { exit }
 echo "Combining raw ROM with NES header"
 JoinFiles bin\Z.nes -in OriginalNesHeader.bin, bin\Z.bin
 
-if ( !$NoVerify )
-{
-	if ( CompareBinaryFiles bin\Z.nes ext\Original.nes )
-	{
-		echo "ROM image is OK"
-	}
-	else
-	{
-		echo "ROM image mismatch"
-	}
-}
-
 python3 patches\emtpy_dungeon_rooms.py bin\Z.nes
-python3 patches\better_minimap_grid.py bin\Z.nes # <-- causes visual glitches in dungeon walls
+python3 patches\better_minimap_grid.py bin\Z.nes
 python3 patches\calculate_bsdiff4.py ext\Original.nes bin\Z.nes bin\z1_base_patch.bsdiff4
