@@ -428,9 +428,10 @@ DrawCaveItems:
     
     ; Check if slot has been bought from --Rose
     LDA ShopType
-    CLC
-    ADC #$01
-    BEQ @ContinueShop
+	NOP
+    NOP
+	NOP
+    BMI @ContinueShop
     STX $062C
     TAX
     LDA #$01
@@ -871,8 +872,9 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     BNE :+
     INC TakeAnyCavesChecked     ; If it's a take-any cave, add it to the count so AP knows when to backfill --Rose
 :
-    ADC #$01
-    BEQ @ContinueTakeItem
+    NOP
+	NOP
+    BMI @ContinueTakeItem
     STX $062C                   ; Stash X so we can use it without stepping on toes --Rose
     TAX
     LDA #$01
